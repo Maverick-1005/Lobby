@@ -25,7 +25,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useModal } from "@/hooks/use-modal-store";
 
@@ -45,17 +45,14 @@ const formSchema = z.object({
 
 })
 
-export const InitialModal = () => {
+export const EditServerModal = () => {
     
-    const {isOpen , onClose , type} = useModal()
-    // console.log("Initial Modal ke andar hoon")
-    // console.log("isOpen = " , isOpen)
-    // console.log("onclose = " , onClose)
-    // console.log("type = " , type)
-    // // const router = useRouter()
+    const {isOpen , onClose , type , data} = useModal()
 
-    const isModalOpen = isOpen && (type === 'createServer')
+    // const router = useRouter()
 
+    const isModalOpen = isOpen && (type === 'editServer')
+    const {server} = data
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -64,17 +61,28 @@ export const InitialModal = () => {
         }
     });
 
+    useEffect(() => {
+        if(server){
+             form.setValue("name" , server.name);
+             form.setValue("imageUrl" , server.imageUrl)
+             setPreviewUrl(server.imageUrl)
+        }
+      
+    } , [server , form])
+
+
     const isLoading = form.formState.isSubmitting;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values);
 
-        await axios.post("/api/servers" , values)
+        await axios.patch(`/api/servers/${server?.id}` , values)
         .then(
             (res) => {
                 console.log("res after creating server" , res)
                 form.reset(); // ye padhlena thoda
                 // router.refresh()
+                onClose()
                 
             }
         )
@@ -121,8 +129,7 @@ export const InitialModal = () => {
     }
 
     return (
-        <div>
-            <Dialog open>
+        <Dialog open={isModalOpen} onOpenChange={handleOnClose}>
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl text-center">
@@ -199,7 +206,7 @@ export const InitialModal = () => {
                         </div>
                         <DialogFooter className="bg-gray-100 px-6 py-4">
                             <Button variant="primary" disabled={isLoading}>
-                                Create
+                                Save
                             </Button>
                         </DialogFooter>
                     </form>
@@ -207,7 +214,5 @@ export const InitialModal = () => {
 
             </DialogContent>
         </Dialog>
-               
-        </div>
-   )
+    )
 }

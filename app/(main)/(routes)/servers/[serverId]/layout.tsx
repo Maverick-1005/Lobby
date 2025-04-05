@@ -3,7 +3,7 @@ import { currProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db"
 import { auth } from "@clerk/nextjs/server"
 import {redirect} from "next/navigation"
-const ServerIdLayout = async({children , params}: {children : React.ReactNode , params: {serverId : string}}) => {
+const ServerIdLayout = async({children , params}: {children : React.ReactNode , params: Promise<{serverId : string}>}) => {
 
 
     const profile = await currProfile()
@@ -14,7 +14,8 @@ const ServerIdLayout = async({children , params}: {children : React.ReactNode , 
     if(!profile){
         return redirectToSignIn()
     }
-    const { serverId } = await params
+    // const { serverId } = await params
+    const serverId = (await params).serverId;
 
 
     const server = await db.server.findUnique({

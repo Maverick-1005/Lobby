@@ -3,7 +3,7 @@ import { db } from "./db"
 
 export const currProfile = async () => {
     const { userId } = await auth()
-
+    console.log("userID in cur profile" , userId)
     if(!userId){
         return null;
     }
@@ -13,7 +13,7 @@ export const currProfile = async () => {
             userId
         }
     });
-
+    console.log(" profile ind curr profile " , profile)
     return profile
 
 
