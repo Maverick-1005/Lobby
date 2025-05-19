@@ -185,7 +185,7 @@ export const CreateServerModal = () => {
                                                 className="bg-zinc-300/50 border-0
                                             focus-visibke:ring-0 text-black focus-visible:ring-offset-0
                                             "
-                                                placeholder="Enter Server image"
+                                                placeholder="Enter Server name"
                                                 {...field}
                                             />
                                         </FormControl>
