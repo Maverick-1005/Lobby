@@ -24,7 +24,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useModal } from "@/hooks/use-modal-store";
 
@@ -58,18 +58,20 @@ const formSchema = z.object({
 
 export const CreateChannelModal = () => {
     
-    const {isOpen , onClose , type} = useModal()
+    const {isOpen , onClose , type , data} = useModal()
 
     // const router = useRouter()
     const params = useParams()
 
     const isModalOpen = isOpen && (type === 'createChannel')
 
+    const {channelType} = data
+
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            type: ChannelType.TEXT
+            type: channelType || ChannelType.TEXT
           
         }
     });
@@ -100,38 +102,19 @@ export const CreateChannelModal = () => {
             console.log("err while creating channel" , err)
         })
     }
+
+    useEffect(() => {
+        if (channelType) {
+            form.setValue("type", channelType);
+        }
+        else {
+            form.setValue("type", ChannelType.TEXT);
+        }
+    } , [channelType, form])
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [previewUrl, setPreviewUrl] = useState("")
     const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-    // const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const selectedFile = e.target.files?.[0];
-    //     if (!selectedFile) return;
-    //     console.log("file", selectedFile)
-    //     setFile(selectedFile);
-    //     setPreviewUrl(URL.createObjectURL(selectedFile))
-
-    //     setUploading(true);
-
-    //     try {
-    //         const formData = new FormData();
-    //         formData.append("file", selectedFile);
-
-    //         const res = await axios.post("/api/upload", formData, {
-    //             headers: { "Content-Type": "multipart/form-data" },
-    //         });
-
-    //         console.log("res aaya ye backend se ", res)
-
-    //         setImageUrl(res.data.url);
-    //         form.setValue("imageUrl", res.data.url); // **Set URL in Form**
-    //     } catch (error) {
-    //         console.error("Upload failed:", error);
-    //     } finally {
-    //         setUploading(false);
-    //     }
-    // };
 
     const handleOnClose = () => {
         form.reset()
