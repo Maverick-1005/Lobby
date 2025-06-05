@@ -1,0 +1,53 @@
+import { ChatHeader } from "@/components/chat/chat-header";
+import { getOrCreateConversation } from "@/lib/conversation";
+import { currProfile } from "@/lib/current-profile";
+import { db } from "@/lib/db";
+import { RedirectToSignIn } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+
+interface MemberIdPageProps {
+  params: {
+    serverId: string;
+    memberId: string;     
+  }
+}
+
+
+
+const MemberIdPage = async ({params}: MemberIdPageProps) => {
+
+  const profile = await currProfile();
+  if (!profile) return RedirectToSignIn;
+
+  const currentMember = await db.member.findFirst({
+    where: {
+      profileId: profile.id,
+      serverId: params.serverId,
+    },
+  });
+  if(!currentMember) return redirect("/")
+
+    const conversation = await getOrCreateConversation(currentMember.id, params.memberId);
+  if (!conversation) {
+    return redirect(`/servers/${params.serverId}`);
+  
+  }
+
+  const {memberOne , memberTwo} = conversation;
+
+  const otherMember = memberOne.id === currentMember.id ? memberTwo : memberOne;
+  if (!otherMember) {
+    return redirect(`/servers/${params.serverId}`);}
+  return (
+    <div className="bg-white dark:bg-[#313338] flex flex-col h-full"> 
+      <ChatHeader
+        name={otherMember.profile.name}
+        serverId={params.serverId}
+        type="conversation"
+        imageUrl={otherMember.profile.imageUrl}
+      />
+      
+    </div>
+  );
+}
+export default MemberIdPage;
