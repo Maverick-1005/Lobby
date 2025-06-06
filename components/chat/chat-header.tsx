@@ -3,6 +3,7 @@ import { MobileToggle } from "../mobile-toggle";
 import { UserAvatar } from "../user-avatar";
 import { SocketIndicator } from "../socket-indicator";
 
+
 interface ChatHeaderProps {
   name: string;
   serverId: string;
