@@ -1,5 +1,6 @@
 import { ChatHeader } from "@/components/chat/chat-header";
 import { ChatInput } from "@/components/chat/chat-input";
+import { ChatMessages } from "@/components/chat/chat-messages";
 import { currProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { RedirectToSignIn } from "@clerk/nextjs";
@@ -45,8 +46,23 @@ import { redirect } from "next/navigation";
         serverId={channel.serverId}
         type="channel"
       />
+      <ChatMessages
+      member={member}
+      name={channel.name}
+      chatId={channel.id}
+      type="channel"
+      apiUrl = "/api/messages"
+      socketUrl="/api/socket/messages"
+      socketQuery={{
+        channelId: channel.id,
+        serverId: channel.serverId
+      }}
+      paramKey="channelId"
+      paramValue={channel.id}
 
-      <div className="flex-1">Future messages</div>
+      />
+
+      {/* <div className="flex-1">Future messages</div> */}
       <ChatInput
       name={channel.name}
       type="channel"
