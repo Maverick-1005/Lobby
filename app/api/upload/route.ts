@@ -13,7 +13,7 @@ const handleAuth = async () => {
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = await handleAuth();
+    // const { userId } = await handleAuth();
 
     const formData = await req.formData();
     const file = formData.get("file") as File | null;

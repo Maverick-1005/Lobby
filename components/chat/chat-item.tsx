@@ -1,165 +1,107 @@
 "use client"
 
-import { Member, MemberRole, Profile } from "@prisma/client"
-import { UserAvatar } from "../user-avatar";
-import { ActionTooltip } from "../action-tooltip";
-import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { useParams, useRouter } from "next/navigation";
-
+import { Member, Profile } from "@prisma/client"
+import { UserAvatar } from "@/components/user-avatar"
+import { ActionTooltip } from "@/components/action-tooltip"
+import { ShieldAlert, ShieldCheck } from "lucide-react"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
 
 interface ChatItemProps {
-    id: string,
-    content: string,
+    id: string;
+    content: string;
     member: Member & {
         profile: Profile;
-    },
+    };
     timestamp: string;
-    fileUrl: string | null;
+    fileUrl?: string | null;
     deleted: boolean;
     currentMember: Member;
     isUpdated: boolean;
     socketUrl: string;
-    socketQuery: Record<string, string>
+    socketQuery: Record<string, string>;
 }
 
-const RoleIconMap = {
+const roleIconMap = {
     "GUEST": null,
     "MODERATOR": <ShieldCheck className="h-4 w-4 ml-2 text-indigo-500" />,
-    "ADMIN": <ShieldAlert className="h-4 w-4 ml-2 text-rose-500 " />
+    "ADMIN": <ShieldAlert className="h-4 w-4 ml-2 text-rose-500" />
 }
 
-export const ChatItem = (
-    { id,
-        content,
-        member,
-        timestamp,
-        fileUrl,
-        deleted,
-        currentMember,
-        isUpdated,
-        socketUrl,
-        socketQuery }: ChatItemProps
+export const ChatItem = ({
+    content,
+    member,
+    timestamp,
+    fileUrl,
+    deleted,
+    currentMember,
+    isUpdated,
+}: ChatItemProps) => {
+    const isAdmin = currentMember.role === "ADMIN";
+    const isModerator = currentMember.role === "MODERATOR";
+    const isOwner = currentMember.id === member.id;
+    const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner);
+    const canEditMessage = !deleted && isOwner && !fileUrl;
+    const isPDF = fileUrl?.toLowerCase().endsWith("pdf");
+    const isImage = !isPDF && fileUrl;
 
-) => {
-
-    const fileType = fileUrl?.split(".").pop()
-
-
-    const isAdmin = currentMember.role === MemberRole.ADMIN
-    const isModerator = currentMember.role === MemberRole.MODERATOR
-    const isOwner = currentMember.id == member.id
-    const canDeleteMessage = !deleted && (isAdmin || isOwner)
-    const canEditMessage = !deleted && isOwner && !fileUrl
-    const isPdf = fileUrl && fileType === "pdf"
-    const isImage = fileUrl && !isPdf
-
-    const [isEditing, setisEditing] = useState(false)
-    const [isDeleting, setIsDeleting] = useState(false)
-
-
-    const params = useParams()
-    const router = useRouter()
-    const onMemberClick = () => {
-        if(member.id === currentMember.id) return
-
-        router.push(`/servers/${params?.serverId}/conversations/${member.id}`)
-    }
     return (
-        <div className="relatie group flex items-center hover:bg-black/5 p-4 transition w-full ">
+        <div className={cn(
+            "group relative flex items-center hover:bg-black/5 p-4 transition w-full",
+            deleted && "italic text-zinc-500"
+        )}>
             <div className="group flex gap-x-2 items-start w-full">
-
-                <div 
-                onClick={onMemberClick}
-                className="cursor-pointer hover:drop-shadow-md transition">
+                <div className="cursor-pointer hover:drop-shadow-md transition">
                     <UserAvatar src={member.profile.imageUrl} />
                 </div>
-
                 <div className="flex flex-col w-full">
                     <div className="flex items-center gap-x-2">
                         <div className="flex items-center">
-                            <p 
-                            onClick={onMemberClick}
-                            className="font-semibold text-sm hover:underline cursor-pointer">
+                            <p className="text-sm font-semibold flex items-center gap-x-1">
                                 {member.profile.name}
+                                <ActionTooltip label={member.role}>
+                                    {roleIconMap[member.role]}
+                                </ActionTooltip>
                             </p>
-                            <ActionTooltip label={member.role}>
-                                <p>{RoleIconMap[member.role]}</p>
-                            </ActionTooltip>
                         </div>
-
                         <span className="text-xs text-zinc-500 dark:text-zinc-400">
                             {timestamp}
                         </span>
                     </div>
-
                     {isImage && (
-                        <a
+                        <a 
                             href={fileUrl}
                             target="_blank"
-                            rel="noopener_noreferrer"
-                            className="relative aspect-square rounded-md mt-2 overflow-hidden border flex-items-center bg-secondary h-48 w-48"
+                            rel="noopener noreferrer"
+                            className="relative aspect-square rounded-md mt-2 overflow-hidden border flex items-center bg-secondary h-48 w-48"
                         >
-                            <Image
+                            <img
                                 src={fileUrl}
                                 alt={content}
-                                fill
                                 className="object-cover"
                             />
-
                         </a>
                     )}
-                    {isPdf && (
-                        <div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10">
-                            <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
-                            <a
-                                href={fileUrl}
-                                target="_blank"
-                                rel="noopener_noreferrer"
-                                className="ml-2 text-sm text-rose-500 dark:text-indigo-400 hover:underline"
-                            >
-                                PDF File
-
-                            </a>
-                        </div>
-                    )}
-                    {!fileUrl && !isEditing && (
-                        <p className={cn("text-sm text-zinc-600 dark:text-zinc-300 ", deleted && "italic text-zic-500 dark:text-zinc-400 text-xs mt-1")}>
+                    {!fileUrl && !deleted && (
+                        <p className={cn(
+                            "text-sm text-zinc-600 dark:text-zinc-300",
+                            deleted && "text-xs text-zinc-500 dark:text-zinc-400 italic"
+                        )}>
                             {content}
                             {isUpdated && !deleted && (
-                                <span className="text-[10px] mx-2 text-zinc-500 dark:text-zinc-400 ">(edited)</span>
+                                <span className="text-[10px] mx-2 text-zinc-500 dark:text-zinc-400">
+                                    (edited)
+                                </span>
                             )}
                         </p>
                     )}
+                    {deleted && (
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400 italic">
+                            This message was deleted
+                        </p>
+                    )}
                 </div>
-               
             </div>
-
-                      {
-                    // TODO:  I'll add the editing option later
-                }
-
-                     {/* {canDeleteMessage && (
-                    <div className="hidden group-hover:flex items-center gap-x-2 absolute p-1 -top-2 right-5 bg-white dark:bg-green-500 border rounded-sm ">
-                        {canEditMessage && (
-                            <ActionTooltip label="Edit">
-                                <Edit
-                                    onClick={() => setisEditing(true)}
-                                    className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
-                                />
-                            </ActionTooltip>
-                        )}
-                        <ActionTooltip label="Delete">
-                            <Trash
-                                className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
-                            />
-                        </ActionTooltip>
-                    </div>
-                )} */}
-
-              
         </div>
     )
 }
