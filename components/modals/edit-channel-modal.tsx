@@ -22,7 +22,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import { useModal } from "@/hooks/use-modal-store";
 
 
@@ -34,7 +34,6 @@ import {
     SelectValue
 } from "@/components/ui/select"
 import { ChannelType } from "@prisma/client";
-import { useParams } from "next/navigation";
 import queryString from "query-string";
 
 

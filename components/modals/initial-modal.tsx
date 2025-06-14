@@ -47,7 +47,7 @@ const formSchema = z.object({
 
 export const InitialModal = () => {
     
-    const {isOpen , onClose , type} = useModal()
+    // const {isOpen , onClose , type} = useModal()
     // console.log("Initial Modal ke andar hoon")
     // console.log("isOpen = " , isOpen)
     // console.log("onclose = " , onClose)
