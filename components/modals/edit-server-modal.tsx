@@ -26,7 +26,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { useModal } from "@/hooks/use-modal-store";
 
 
@@ -90,16 +89,16 @@ export const EditServerModal = () => {
             console.log("err while creating server" , err)
         })
     }
-    const [file, setFile] = useState<File | null>(null);
+    // const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [previewUrl, setPreviewUrl] = useState("")
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    // const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
         if (!selectedFile) return;
         console.log("file", selectedFile)
-        setFile(selectedFile);
+        // setFile(selectedFile);
         setPreviewUrl(URL.createObjectURL(selectedFile))
 
         setUploading(true);
@@ -114,7 +113,7 @@ export const EditServerModal = () => {
 
             console.log("res aaya ye backend se ", res)
 
-            setImageUrl(res.data.url);
+            // setImageUrl(res.data.url);
             form.setValue("imageUrl", res.data.url); // **Set URL in Form**
         } catch (error) {
             console.error("Upload failed:", error);

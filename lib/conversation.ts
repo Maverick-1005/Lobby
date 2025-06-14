@@ -39,6 +39,7 @@ try {
       return conversation;
     
 } catch (error) {
+  console.log("error in findConversation", error)
     return null;
 }}
 
@@ -66,6 +67,7 @@ try {
       return conversation;
     
 } catch (error) {
+  console.log("error in createNewConversation", error)
     return null;
 }
 

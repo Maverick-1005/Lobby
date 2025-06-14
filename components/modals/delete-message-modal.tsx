@@ -29,13 +29,13 @@ import { useRouter } from "next/navigation";
 
 export const DeleteMessageModal = () => {
     
-    const {isOpen , onClose , onOpen , type , data} = useModal()
-    const router = useRouter()
+    const {isOpen , onClose  , type } = useModal()
+    // const router = useRouter()
 
     const isModalOpen = isOpen && (type === 'deleteMessage')
-    const {server , channel} = data
+    // const {server , channel} = data
     const [isLoading, setIsLoading] = useState(false)
-
+    setIsLoading(false)
 
     const onClick = async () => {
         //  setIsLoading(true)

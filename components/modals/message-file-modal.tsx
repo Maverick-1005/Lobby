@@ -18,7 +18,6 @@ import {
     FormControl,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage
 } from "@/components/ui/form"
 
@@ -94,7 +93,7 @@ export const MessageFilelModal = () => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [previewUrl, setPreviewUrl] = useState("")
-    const [fileUrl, setfileUrl] = useState<string | null>(null);
+    // const [fileUrl, setfileUrl] = useState<string | null>(null);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -115,7 +114,7 @@ export const MessageFilelModal = () => {
 
             console.log("res aaya ye backend se ", res)
 
-            setfileUrl(res.data.url);
+            // setfileUrl(res.data.url);
             form.setValue("fileUrl", res.data.url); // **Set URL in Form**
         } catch (error) {
             console.error("Upload failed:", error);

@@ -3,8 +3,6 @@ import axios from "axios"
 import { useForm } from "react-hook-form";
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import { X } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -25,7 +23,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { useModal } from "@/hooks/use-modal-store";
 
 
@@ -111,10 +108,10 @@ export const CreateChannelModal = () => {
             form.setValue("type", ChannelType.TEXT);
         }
     } , [channelType, form])
-    const [file, setFile] = useState<File | null>(null);
-    const [uploading, setUploading] = useState(false);
-    const [previewUrl, setPreviewUrl] = useState("")
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    // const [file, setFile] = useState<File | null>(null);
+    // const [uploading, setUploading] = useState(false);
+    // const [previewUrl, setPreviewUrl] = useState("")
+    // const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     const handleOnClose = () => {
         form.reset()

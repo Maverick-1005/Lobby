@@ -29,7 +29,7 @@ import { useRouter } from "next/navigation";
 
 export const DeleteServerModal = () => {
     
-    const {isOpen , onClose , onOpen , type , data} = useModal()
+    const {isOpen , onClose  , type , data} = useModal()
     const router = useRouter()
 
     const isModalOpen = isOpen && (type === 'deleteServer')
@@ -39,7 +39,7 @@ export const DeleteServerModal = () => {
 
     const onClick = async () => {
         axios.delete(`../api/servers/${server?.id}`)
-        .then((res) => {
+        .then(() => {
             setIsLoading(true)
             router.refresh();
             router.push("/")

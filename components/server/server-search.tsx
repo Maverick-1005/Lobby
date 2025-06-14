@@ -1,7 +1,7 @@
 "use client"
 
 import { Search } from "lucide-react"
-import { KeyboardEvent, use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command"
 import { DialogTitle } from "../ui/dialog"
 import { useParams, useRouter } from "next/navigation"

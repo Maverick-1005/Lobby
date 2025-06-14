@@ -29,7 +29,7 @@ import { useRouter } from "next/navigation";
 
 export const LeaveServerModal = () => {
     
-    const {isOpen , onClose , onOpen , type , data} = useModal()
+    const {isOpen , onClose  , type , data} = useModal()
     const router = useRouter()
 
     const isModalOpen = isOpen && (type === 'leaveServer')
@@ -39,14 +39,10 @@ export const LeaveServerModal = () => {
 
     const onClick = async () => {
         axios.patch(`../api/servers/${server?.id}/leave`)
-        .then((res) => {
+        .then(() => {
             setIsLoading(true)
             router.refresh();
             router.push("/")
-            
-
-
-
             onClose()
         })
         .catch((err) => {

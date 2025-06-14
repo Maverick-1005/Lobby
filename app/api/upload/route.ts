@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { uploadOnCloudinary } from "@/lib/cloudinary";
-import {auth} from "@clerk/nextjs/server"
 
 
 // const handleAuth = async () => {

@@ -3,7 +3,7 @@ import { db } from "@/lib/db"
 import { ChannelType, MemberRole } from "@prisma/client"
 import { redirect } from "next/navigation"
 import { ScrollArea } from "../ui/scroll-area"
-import { Hash, Mic, Shield, ShieldAlert, ShieldCheck, Video } from "lucide-react"
+import { Hash, Mic,  ShieldAlert, ShieldCheck, Video } from "lucide-react"
 import { Separator } from "../ui/separator"
 
 
@@ -13,7 +13,6 @@ import { ServerSearch } from "./server-search"
 import { ServerSection } from "./server-section"
 import { ServerChannel } from "./server-channel"
 import { ServerMember } from "./server-member"
-import { channel } from "diagnostics_channel"
 
 
 interface ServerSidebarProps {

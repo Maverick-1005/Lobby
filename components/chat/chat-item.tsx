@@ -4,7 +4,6 @@ import { Member, Profile } from "@prisma/client"
 import { UserAvatar } from "@/components/user-avatar"
 import { ActionTooltip } from "@/components/action-tooltip"
 import { ShieldAlert, ShieldCheck } from "lucide-react"
-import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 
 interface ChatItemProps {
@@ -37,11 +36,11 @@ export const ChatItem = ({
     currentMember,
     isUpdated,
 }: ChatItemProps) => {
-    const isAdmin = currentMember.role === "ADMIN";
-    const isModerator = currentMember.role === "MODERATOR";
-    const isOwner = currentMember.id === member.id;
-    const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner);
-    const canEditMessage = !deleted && isOwner && !fileUrl;
+    // const isAdmin = currentMember.role === "ADMIN";
+    // const isModerator = currentMember.role === "MODERATOR";
+    // const isOwner = currentMember.id === member.id;
+    // const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner);
+    // const canEditMessage = !deleted && isOwner && !fileUrl;
     const isPDF = fileUrl?.toLowerCase().endsWith("pdf");
     const isImage = !isPDF && fileUrl;
 
