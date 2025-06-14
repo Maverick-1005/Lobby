@@ -33,7 +33,7 @@ export const ChatItem = ({
     timestamp,
     fileUrl,
     deleted,
-    currentMember,
+   
     isUpdated,
 }: ChatItemProps) => {
     // const isAdmin = currentMember.role === "ADMIN";
