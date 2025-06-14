@@ -1,6 +1,5 @@
 import { NextApiRequest } from "next";
 import { NextApiResponseServerIo } from "@/types";  
-import { error } from "console";
 import { currProfilePages } from "@/lib/current-profile-pages";
 import { db } from "@/lib/db";
 import { MemberRole } from "@prisma/client";

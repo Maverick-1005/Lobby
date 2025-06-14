@@ -3,13 +3,13 @@ import { uploadOnCloudinary } from "@/lib/cloudinary";
 import {auth} from "@clerk/nextjs/server"
 
 
-const handleAuth = async () => {
-   const {userId} = await auth();
+// const handleAuth = async () => {
+//    const {userId} = await auth();
 
-   if(!userId) throw new Error("Unauthorized")
-   return {userId}
+//    if(!userId) throw new Error("Unauthorized")
+//    return {userId}
 
-}
+// }
 
 export async function POST(req: NextRequest) {
   try {
