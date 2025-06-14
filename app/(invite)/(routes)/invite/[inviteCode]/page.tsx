@@ -3,32 +3,25 @@ import { currProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
-
-interface InviteCodePageParams {
+interface InviteCodePageProps {
     params: {
-        inviteCode: string
-    }
+        inviteCode: string;
+    };
 }
-
-
-
 
 export default async function InviteCodePage({
     params
-}: InviteCodePageParams) {
-
+}: InviteCodePageProps) {
     const profile = await currProfile();
-    console.log("HELLO AAAWAJ AARHA HAI???")
-    // const {redirectToSignIn} = await auth()
-    console.log("profile is " , profile)
+    
     if(!profile){
-        console.log("redirect 1 ")
         return redirect("/")
     }
-    const {inviteCode} = await params
+
+    const {inviteCode} = params;
+    
     if(!inviteCode){
-      console.log("redirect 2");
-      return redirect("/");  
+        return redirect("/");  
     } 
 
     const existingServer = await db.server.findFirst({
@@ -41,9 +34,11 @@ export default async function InviteCodePage({
             }
         }
     })
+
     if (existingServer) {
         return <InviteNotification message="You are already in the server!" redirectUrl={`/servers/${existingServer.id}`} />;
-      }
+    }
+
     const server = await db.server.update({
         where: {
             inviteCode
@@ -61,8 +56,7 @@ export default async function InviteCodePage({
    
     if (server) {
         return <InviteNotification message="Server Joined Successfully!" redirectUrl={`/servers/${server.id}`} />;
-      }
+    }
     
-    return null
-
+    return null;
 }
