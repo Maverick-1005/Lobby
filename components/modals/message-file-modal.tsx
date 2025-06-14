@@ -3,7 +3,6 @@ import axios from "axios"
 import { useForm } from "react-hook-form";
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { Paperclip, X } from "lucide-react";
 import {
     Dialog,

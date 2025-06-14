@@ -1,7 +1,6 @@
 import InviteNotification from "@/components/invite/InviteNotification";
 import { currProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 

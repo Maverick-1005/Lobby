@@ -1,18 +1,13 @@
 import { ServerSidebar } from "@/components/server/server-sidebar"
 import { currProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db"
-import { auth } from "@clerk/nextjs/server"
 import {redirect} from "next/navigation"
+
 const ServerIdLayout = async({children , params}: {children : React.ReactNode , params: Promise<{serverId : string}>}) => {
-
-
     const profile = await currProfile()
 
-
-    const {redirectToSignIn} = await auth()
-
     if(!profile){
-        return redirectToSignIn()
+        return redirect("/sign-in")
     }
     // const { serverId } = await params
     const serverId = (await params).serverId;
