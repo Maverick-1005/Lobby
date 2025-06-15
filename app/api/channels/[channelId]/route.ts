@@ -6,7 +6,10 @@ import { db } from "@/lib/db";
 import { MemberRole } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-export async function DELETE(req: Request , {params} : {params: {channelId: string}}) {
+export async function DELETE(req: Request , {params} : {
+    params: Promise<{channelId: string}>
+}
+) {
 
     try {
 
@@ -16,7 +19,7 @@ export async function DELETE(req: Request , {params} : {params: {channelId: stri
         }
         const {searchParams} = new URL(req.url);
 
-        const channelId = await params.channelId;
+        const channelId = (await params).channelId;
 
         const serverId = searchParams.get("serverId");
 
@@ -62,7 +65,7 @@ export async function DELETE(req: Request , {params} : {params: {channelId: stri
     }
 }
 
-export async function PATCH(req: Request , {params} : {params: {channelId: string}}) {
+export async function PATCH(req: Request , {params} : {params: Promise<{channelId: string}>}) {
 
     try {
 
@@ -74,7 +77,7 @@ export async function PATCH(req: Request , {params} : {params: {channelId: strin
         const {name , type} = await req.json();
         const {searchParams} = new URL(req.url);
 
-        const channelId = await params.channelId;
+        const channelId = (await params).channelId;
 
         const serverId = searchParams.get("serverId");
         if(name === "general") {

@@ -8,10 +8,10 @@ import { RedirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 interface MemberIdPageProps {
-  params: {
-    serverId: string;
-    memberId: string;     
-  }
+    params: Promise<{
+     serverId: string;
+     memberId: string;  
+   }>
 }
 
 
@@ -24,14 +24,14 @@ const MemberIdPage = async ({params}: MemberIdPageProps) => {
   const currentMember = await db.member.findFirst({
     where: {
       profileId: profile.id,
-      serverId: params.serverId,
+      serverId: (await params).serverId,
     },
   });
   if(!currentMember) return redirect("/")
 
-    const conversation = await getOrCreateConversation(currentMember.id, params.memberId);
+    const conversation = await getOrCreateConversation(currentMember.id, (await params).memberId);
   if (!conversation) {
-    return redirect(`/servers/${params.serverId}`);
+    return redirect(`/servers/${(await params).serverId}`);
   
   }
 
@@ -39,12 +39,12 @@ const MemberIdPage = async ({params}: MemberIdPageProps) => {
 
   const otherMember = memberOne.id === currentMember.id ? memberTwo : memberOne;
   if (!otherMember) {
-    return redirect(`/servers/${params.serverId}`);}
+    return redirect(`/servers/${(await params).serverId}`);}
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full"> 
       <ChatHeader
         name={otherMember.profile.name}
-        serverId={params.serverId}
+        serverId={(await params).serverId}
         type="conversation"
         imageUrl={otherMember.profile.imageUrl}
       />

@@ -2,7 +2,7 @@ import { currProfile } from "@/lib/current-profile"
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server"
 
-export async function DELETE(req: Request , {params} : {params: {memberId : string}}) {
+export async function DELETE(req: Request , {params} : {params: Promise<{memberId : string}>}) {
 
     try {
         
@@ -13,7 +13,7 @@ export async function DELETE(req: Request , {params} : {params: {memberId : stri
             const serverId = searchParams.get("serverId")
 
             if(!serverId) return new NextResponse("Server Id is missing" , {status: 403})
-                if(!params.memberId) return new NextResponse("MemberId is missing" , {status: 403});
+                if(!(await params).memberId) return new NextResponse("MemberId is missing" , {status: 403});
 
             const server = await db.server.update({
                 where: {
@@ -23,7 +23,7 @@ export async function DELETE(req: Request , {params} : {params: {memberId : stri
                 data: {
                     members: {
                         deleteMany: {
-                            id: params.memberId,
+                            id: (await params).memberId,
                            profileId: {
                             not: profile.id
                            }
@@ -52,7 +52,7 @@ export async function DELETE(req: Request , {params} : {params: {memberId : stri
 
 
 
-export async function PATCH(req:Request , {params} : {params: {memberId : string}}) {
+export async function PATCH(req:Request , {params} : {params: Promise<{memberId : string}>}) {
     
 
     try {
@@ -66,7 +66,7 @@ export async function PATCH(req:Request , {params} : {params: {memberId : string
 
         if(!serverId) return new NextResponse("Server Id is missing" , {status: 403})
         
-            if(!params.memberId) return new NextResponse("MemberId is missing" , {status: 403});
+            if(!(await params).memberId) return new NextResponse("MemberId is missing" , {status: 403});
         
         const server = await db.server.update({
             where: {
@@ -78,7 +78,7 @@ export async function PATCH(req:Request , {params} : {params: {memberId : string
                 members: {
                     update: {
                         where: {
-                            id: params.memberId,
+                            id: (await params).memberId,
                             profileId: {
                                 not: profile.id
                             },

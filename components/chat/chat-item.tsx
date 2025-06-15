@@ -4,7 +4,6 @@ import { Member, Profile } from "@prisma/client"
 import { UserAvatar } from "@/components/user-avatar"
 import { ActionTooltip } from "@/components/action-tooltip"
 import { ShieldAlert, ShieldCheck } from "lucide-react"
-import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 
 interface ChatItemProps {

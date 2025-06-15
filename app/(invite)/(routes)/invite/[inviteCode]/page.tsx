@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 
 
 interface InviteCodePageParams {
-    params: {
+    params: Promise<{
         inviteCode: string
-    }
+    }>
 }
 
 
