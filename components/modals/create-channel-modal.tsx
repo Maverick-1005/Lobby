@@ -25,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+
 import { useModal } from "@/hooks/use-modal-store";
 
 
@@ -37,7 +37,7 @@ import {
     SelectValue
 } from "@/components/ui/select"
 import { ChannelType } from "@prisma/client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import queryString from "query-string";
 
 
@@ -60,7 +60,7 @@ export const CreateChannelModal = () => {
     
     const {isOpen , onClose , type , data} = useModal()
 
-    // const router = useRouter()
+    const router = useRouter()
     const params = useParams()
 
     const isModalOpen = isOpen && (type === 'createChannel')
@@ -93,8 +93,9 @@ export const CreateChannelModal = () => {
             (res) => {
                 console.log("res after creating channel" , res)
                 form.reset(); // ye padhlena thoda
-                // router.refresh()
+                router.refresh()
                 onClose()
+                
                 
             }
         )

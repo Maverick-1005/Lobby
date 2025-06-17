@@ -38,9 +38,10 @@ export const DeleteServerModal = () => {
 
 
     const onClick = async () => {
-        axios.delete(`../api/servers/${server?.id}`)
+         setIsLoading(true)
+        axios.delete(`/api/servers/${server?.id}`)
         .then((res) => {
-            setIsLoading(true)
+           
             router.refresh();
             router.push("/")
             
@@ -49,6 +50,9 @@ export const DeleteServerModal = () => {
         })
         .catch((err) => {
             console.log("Err while leaving server" , err)
+        })
+        .finally(() => {
+            setIsLoading(false)
         })
     }
 

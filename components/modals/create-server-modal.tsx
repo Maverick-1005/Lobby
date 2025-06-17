@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
 
 
@@ -49,7 +49,7 @@ export const CreateServerModal = () => {
     
     const {isOpen , onClose , type} = useModal()
 
-    // const router = useRouter()
+    const router = useRouter()
 
     const isModalOpen = isOpen && (type === 'createServer')
 
@@ -71,7 +71,7 @@ export const CreateServerModal = () => {
             (res) => {
                 console.log("res after creating server" , res)
                 form.reset(); // ye padhlena thoda
-                // router.refresh()
+                router.refresh()
                 onClose()
                 
             }
@@ -88,7 +88,7 @@ export const CreateServerModal = () => {
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
         if (!selectedFile) return;
-        console.log("file", selectedFile)
+        console.log("uploaded file", selectedFile)
         setFile(selectedFile);
         setPreviewUrl(URL.createObjectURL(selectedFile))
 
@@ -101,8 +101,8 @@ export const CreateServerModal = () => {
             const res = await axios.post("/api/upload", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-
-            console.log("res aaya ye backend se ", res)
+            
+            console.log("photo upload res:  ", res)
 
             setImageUrl(res.data.url);
             form.setValue("imageUrl", res.data.url); // **Set URL in Form**

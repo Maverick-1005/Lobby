@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-
+    console.log("backend mein aagya ")
     if (!file) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
     const fileUrl = await uploadOnCloudinary(fileBuffer, file.type);
 
     if (!fileUrl) {
+      console.log("backend error upload")
       return NextResponse.json({ error: "Upload failed" }, { status: 500 });
     }
 
