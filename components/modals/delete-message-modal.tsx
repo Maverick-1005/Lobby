@@ -17,10 +17,10 @@ import { useModal } from "@/hooks/use-modal-store";
 
 
 import { Button } from "../ui/button";
-// import axios from "axios";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 
-// import qs from "query-string";
+import qs from "query-string";
 
 
 // HYDRATION ERRORS KAA DHyAAn RKHNA
@@ -33,32 +33,28 @@ export const DeleteMessageModal = () => {
     const router = useRouter()
 
     const isModalOpen = isOpen && (type === 'deleteMessage')
-    const {server , channel} = data
+    const {apiUrl , query } = data
     const [isLoading, setIsLoading] = useState(false)
 
 
     const onClick = async () => {
-        //  setIsLoading(true)
-        //  const url = qs.stringifyUrl({
-        //     url: `/api/channels/${channel?.id}`,
-        //     query: {
-        //         serverId: server?.id
-        //     }
-        //  })
+         setIsLoading(true)
+         const url = qs.stringifyUrl({
+            url: apiUrl || "",
+            query
+         })
 
-        // axios.delete(url)
-        // .then((res) => {
-        //     router.refresh();
-        //     router.push(`/servers/${server?.id}}`);
-            
-        //     onClose()
-        // })
-        // .catch((err) => {
-        //     console.log("Err while deleting channel" , err)
-        // })
-        // .finally(() => {
-        //     setIsLoading(false)
-        // })
+        axios.delete(url)
+        .then((res) => {
+            router.refresh();            
+            onClose()
+        })
+        .catch((err) => {
+            console.log("Err while deleting message" , err)
+        })
+        .finally(() => {
+            setIsLoading(false)
+        })
     }
 
     return (
