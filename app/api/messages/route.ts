@@ -61,20 +61,18 @@ export async function GET(req: Request) {
 
             })
 
-            let nextCursor = null;
+           
+        }
+         let nextCursor = null;
 
-            if(messages.length === MESSAGES_BATCH) {
-                nextCursor  = messages[MESSAGES_BATCH-1].id
+            if (messages.length === MESSAGES_BATCH) {
+                nextCursor = messages[MESSAGES_BATCH - 1].id
             }
 
             return NextResponse.json({
                 items: messages,
                 nextCursor
-            }
-               
-
-            )
-        }
+            })
 
     } catch (error) {
         console.log("Messages_GET", error);

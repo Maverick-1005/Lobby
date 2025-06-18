@@ -59,11 +59,11 @@ export const ChatMessages = ({
         hasNextPage,
         isFetchingNextPage,
         status
-    } = useChatQuery({
+    } =useChatQuery({
         queryKey,
         apiUrl,
         paramKey,
-        paramValue
+        paramValue 
     })
 
     useChatSocket({queryKey , updateKey , addKey})
@@ -72,7 +72,7 @@ export const ChatMessages = ({
         chatRef ,
         bottomRef ,
         loadMore: fetchNextPage,
-        shouldLoadMore: !isFetchingNextPage && !hasNextPage,
+        shouldLoadMore: !isFetchingNextPage && hasNextPage,
         count: data?.pages?.[0]?.items?.length ?? 0,
         
     })
@@ -89,7 +89,7 @@ export const ChatMessages = ({
         return (
             <div className="flex flex-col flex-1 justify-center items-center">
                 <ServerCrash className="h-7 w-7 text-z0nc-500  my-4"/>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">Something went wrong :/</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">Something went wrong while fetching previous messages :/</p>
             </div>
         )
     }
