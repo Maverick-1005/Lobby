@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
 
 
@@ -52,7 +52,7 @@ export const InitialModal = () => {
     // console.log("isOpen = " , isOpen)
     // console.log("onclose = " , onClose)
     // console.log("type = " , type)
-    // // const router = useRouter()
+    const router = useRouter()
 
     const isModalOpen = isOpen && (type === 'createServer')
 
@@ -72,9 +72,16 @@ export const InitialModal = () => {
         await axios.post("/api/servers" , values)
         .then(
             (res) => {
-                console.log("res after creating server" , res)
+                //    console.log("iske baad kaa kuch bhi")
+                //     console.log("server id " , res.data?.id)
+                //     console.log("channel id " , res.data?.data?.chanels[0].id)
+
+                console.log("res after creating server initial model" , res)
+                 onClose()
                 form.reset(); // ye padhlena thoda
-                // router.refresh()
+                
+                router.refresh()
+               
                 
             }
         )
@@ -155,15 +162,25 @@ export const InitialModal = () => {
                                                         className="hidden"
                                                     />
                                                     <label htmlFor="avatar">
-                                                        {previewUrl ?
-                                                        <div className="cursor-pointer">
+
+
+                                                        {
+                                                            !previewUrl && (<div className="cursor-pointer"><CameraAltIcon /><span className="text-sm"> Upload </span></div>)
+                                                        } {
+                                                            uploading && (
+                                                                <Loader2 className="h-7 w-7 animate-spin"/>
+                                                            )
+                                                        }
+                                                        
+                                                        {
+                                                            previewUrl && !uploading && (<div className="cursor-pointer">
                                                             <img className="rounded-full  relative h-28 w-28 object-cover" src={previewUrl}/>
                                                             <div className="absolute bg-rose-500 p-1 rounded-full shadow-sm top-0 right-2" onClick={() => {
                                                                 setPreviewUrl("");
                                                             }}> <X className="h-4 w-4 text-white"></X> </div>
-                                                            </div>
-                                                        : <><div className="cursor-pointer"><CameraAltIcon/><span className="text-sm"> Upload </span></div>
-                                                            </> }
+                                                            </div>)
+                                                        }
+
                                                     </label>
                                                 </div>
                                             </FormControl>

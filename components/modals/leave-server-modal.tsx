@@ -38,9 +38,10 @@ export const LeaveServerModal = () => {
 
 
     const onClick = async () => {
-        axios.patch(`../api/servers/${server?.id}/leave`)
+         setIsLoading(true)
+        axios.patch(`/api/servers/${server?.id}/leave`)
         .then((res) => {
-            setIsLoading(true)
+           
             router.refresh();
             router.push("/")
             
@@ -52,6 +53,7 @@ export const LeaveServerModal = () => {
         .catch((err) => {
             console.log("Err while leaving server" , err)
         })
+        .finally(() => setIsLoading(false))
     }
 
     return (

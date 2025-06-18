@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -46,8 +46,8 @@ const formSchema = z.object({
 })
 
 export const CreateServerModal = () => {
-    
-    const {isOpen , onClose , type} = useModal()
+
+    const { isOpen, onClose, type } = useModal()
 
     const router = useRouter()
 
@@ -66,19 +66,30 @@ export const CreateServerModal = () => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values);
 
-        await axios.post("/api/servers" , values)
-        .then(
-            (res) => {
-                console.log("res after creating server" , res)
-                form.reset(); // ye padhlena thoda
-                router.refresh()
+        await axios.post("/api/servers", values)
+            .then(
+                (res) => {
+               
+                    console.log("res after creating server", res)
+                    // console.log("server id" , res.data.id)
+                    // console.log("general id" , res.data.channels[0].id)
+
+                     onClose()
+                    // router.push(`/servers/${res.data?.id}/channels/${res.data?.channels[0].id}`)
+                    form.reset(); // ye padhlena thoda
+                    router.refresh()
+                   
+
+                }
+            )
+            .catch((err) => {
+                console.log("err while creating server", err)
+            })
+            .finally(() => {
+                console.log("finally to print hua")
+                form.reset()
                 onClose()
-                
-            }
-        )
-        .catch((err) => {
-            console.log("err while creating server" , err)
-        })
+            })
     }
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
@@ -86,13 +97,15 @@ export const CreateServerModal = () => {
     const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUploading(true);
+
         const selectedFile = e.target.files?.[0];
         if (!selectedFile) return;
         console.log("uploaded file", selectedFile)
         setFile(selectedFile);
         setPreviewUrl(URL.createObjectURL(selectedFile))
 
-        setUploading(true);
+
 
         try {
             const formData = new FormData();
@@ -101,7 +114,7 @@ export const CreateServerModal = () => {
             const res = await axios.post("/api/upload", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            
+
             console.log("photo upload res:  ", res)
 
             setImageUrl(res.data.url);
@@ -152,15 +165,25 @@ export const CreateServerModal = () => {
                                                         className="hidden"
                                                     />
                                                     <label htmlFor="avatar">
-                                                        {previewUrl ?
-                                                        <div className="cursor-pointer">
+
+
+                                                        {
+                                                            !previewUrl && (<div className="cursor-pointer"><CameraAltIcon /><span className="text-sm"> Upload </span></div>)
+                                                        } {
+                                                            uploading && (
+                                                                <Loader2 className="h-7 w-7 animate-spin"/>
+                                                            )
+                                                        }
+                                                        
+                                                        {
+                                                            previewUrl && !uploading && (<div className="cursor-pointer">
                                                             <img className="rounded-full  relative h-28 w-28 object-cover" src={previewUrl}/>
                                                             <div className="absolute bg-rose-500 p-1 rounded-full shadow-sm top-0 right-2" onClick={() => {
                                                                 setPreviewUrl("");
                                                             }}> <X className="h-4 w-4 text-white"></X> </div>
-                                                            </div>
-                                                        : <><div className="cursor-pointer"><CameraAltIcon/><span className="text-sm"> Upload </span></div>
-                                                            </> }
+                                                            </div>)
+                                                        }
+
                                                     </label>
                                                 </div>
                                             </FormControl>
