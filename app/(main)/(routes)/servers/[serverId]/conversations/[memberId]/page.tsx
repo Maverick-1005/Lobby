@@ -6,6 +6,7 @@ import { currProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { RedirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import ClientChatPage from "./_components/client-chat-page";
 
 interface MemberIdPageProps {
     params: Promise<{
@@ -40,40 +41,17 @@ const MemberIdPage = async ({params}: MemberIdPageProps) => {
   const otherMember = memberOne.id === currentMember.id ? memberTwo : memberOne;
   if (!otherMember) {
     return redirect(`/servers/${(await params).serverId}`);}
+
+  
+
   return (
-    <div className="bg-white dark:bg-[#313338] flex flex-col h-full"> 
-      <ChatHeader
-        name={otherMember.profile.name}
-        serverId={(await params).serverId}
-        type="conversation"
-        imageUrl={otherMember.profile.imageUrl}
-      />
-      <ChatMessages
-      member={currentMember}
-      name={otherMember.profile.name}
-      chatId={conversation.id}
-      type="conversation"
-      apiUrl="/api/direct-messages"
-      paramKey="conversationId"
-      paramValue={conversation.id}
-      socketUrl="/api/socket/direct-messages"
-      socketQuery={{
-        conversationId: conversation.id
-      }}
-
-
-      
-      />
-      <ChatInput
-      name={otherMember.profile.name}
-      type="conversation"
-     
-      apiUrl="/api/socket/direct-messages"
-      query={{
-        conversationId: conversation.id
-      }}
-      />
-    </div>
+    <ClientChatPage
+      otherMember={otherMember}
+      currentMember={currentMember}
+      serverId={(await params).serverId}
+      conversationId={conversation.id}
+    />
   );
-}
+};
+    
 export default MemberIdPage;
