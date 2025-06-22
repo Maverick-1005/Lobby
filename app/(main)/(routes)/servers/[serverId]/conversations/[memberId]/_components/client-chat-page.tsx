@@ -30,7 +30,7 @@ const ClientChatPage = ({
         serverId={serverId}
         type="conversation"
         imageUrl={otherMember.profile.imageUrl}
-        memberId = {otherMember.id}
+        memberId = {otherMember.profile.userId}
       />
       <ChatMessages
         member={currentMember}
