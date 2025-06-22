@@ -40,7 +40,7 @@ export const ChatHeader = ({
         <p className="font-semibold text-md text-black dark:text-white">
           {name}
         </p>
-        <OnlineIndicator memberId={memberId}/>
+      {type==="conversation" && <OnlineIndicator memberId={memberId}/>}
       </div>
 
       <div className="ml-auto flex items-center">

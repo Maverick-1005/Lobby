@@ -47,6 +47,7 @@ import { redirect } from "next/navigation";
         name={channel.name}
         serverId={channel.serverId}
         type="channel"
+        memberId={member.id}
       />
       <ChatMessages
       member={member}
