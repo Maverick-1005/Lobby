@@ -4,6 +4,7 @@ import { Hash } from "lucide-react";
 import { MobileToggle } from "../mobile-toggle";
 import { UserAvatar } from "../user-avatar";
 import { SocketIndicator } from "../socket-indicator";
+import { OnlineIndicator } from "../online-status";
 
 
 
@@ -12,7 +13,7 @@ interface ChatHeaderProps {
   serverId: string;
   type: "channel" | "conversation";
   imageUrl?: string;
-  // isOnline: boolean
+  memberId : string
 }
 
 export const ChatHeader = ({
@@ -20,7 +21,7 @@ export const ChatHeader = ({
   name,
   type,
   imageUrl,
-  // isOnline
+  memberId
 }: ChatHeaderProps) => {
 
 
@@ -39,8 +40,7 @@ export const ChatHeader = ({
         <p className="font-semibold text-md text-black dark:text-white">
           {name}
         </p>
-        {/* {isOnline && <p className="font-semibold text-sm text-green-600 dark:text-green-300">Online</p>}
-        {!isOnline && <p className="font-semibold text-sm text-gray-500 dark:text-gray-400">Offline</p> } */}
+        <OnlineIndicator memberId={memberId}/>
       </div>
 
       <div className="ml-auto flex items-center">

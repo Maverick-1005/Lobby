@@ -1,6 +1,22 @@
 import { db } from "./db";  
 
 export const getOrCreateConversation = async(memberOneId: string, memberTwoId: string) => {
+
+
+  // check whether the members exist or not
+  const memberOne = await db.member.findFirst({
+    where: {
+      id: memberOneId
+    }
+  })
+  const memberTwo = await db.member.findFirst({
+    where: {
+      id: memberTwoId
+    }
+  })
+  if(!memberOne || !memberTwo) return null;
+
+
   const existingConversation = await findConversation(memberOneId, memberTwoId) || await findConversation(memberTwoId, memberOneId);
   if (existingConversation) {
     return existingConversation;
